@@ -80,9 +80,26 @@ form:
       demodra-app-name: '{{services.demodra-repo.parameters.repo_name}}'
     schema:
       $ref: deploy.json
-  githubconsolidated:
-    parameters:
-      demodra-repo_name: '{{toolchain.name}}'
-      demodra-repo_url: 'https://github.com/open-toolchain/DemoDRA'
-    schema:
-      $ref: github.json
+  $switch:
+    - $expr: $env.source_provider
+    - $default: 'hostedgit'
+      hostedgit:
+        parameters:
+          demodra-repo_name: '{{toolchain.name}}'
+          demodra-repo_url: 'https://github.com/open-toolchain/DemoDRA'
+        schema:
+          $ref: github.json
+    - $case: 'githubconsolidated'
+      githubconsolidated:
+        parameters:
+          demodra-repo_name: '{{toolchain.name}}'
+          demodra-repo_url: 'https://github.com/open-toolchain/DemoDRA'
+        schema:
+          $ref: github.json
+    - $case: 'github_integrated'
+      github_integrated:
+        parameters:
+          demodra-repo_name: '{{toolchain.name}}'
+          demodra-repo_url: 'https://github.com/open-toolchain/DemoDRA'
+        schema:
+          $ref: github.json
